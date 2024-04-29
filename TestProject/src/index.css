@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+.active {
+  @apply border-myCustomColor border-b-2  text-xl text-myCustomColor
+}
