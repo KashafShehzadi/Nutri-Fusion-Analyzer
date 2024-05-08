@@ -7,7 +7,10 @@ const UserQuerySchema = new mongoose.Schema({
     },
     foodItem1: String,
     foodItem2: String,
-    analysisResult: String
+    analysisResult: {
+        type: Object,
+        required: true,
+      },
 });
 
 const UserQuery = mongoose.model('UserQuery', UserQuerySchema);

@@ -4,6 +4,7 @@ import { UserRouter } from './routes/user.js';
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import cors from 'cors'
+import { UserChat } from './routes/chats.js';
 dotenv.config()
 
 const  app=express();
@@ -16,6 +17,7 @@ app.use(cors({
 app.use(cookieParser())
 
 app.use('/auth',UserRouter)
+app.use('/analyze',UserChat)
 mongoose.connect('mongodb://127.0.0.1:27017/authentication')
 app.listen(process.env.PORT, ()=> {console.log(`Server started`)})
 
