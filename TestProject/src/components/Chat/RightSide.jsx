@@ -10,7 +10,7 @@ import axios from 'axios';
 const RightSide = () => {
   const [foodItem1, setFoodItem1] = useState('');
   const [foodItem2, setFoodItem2] = useState('');
-  const [Results,setResults]=useState([]);
+  const [results,setResults]=useState(null);
   // const [foodItem1Res, setRes1] = useState('');
   // const [foodItem2Res, setRes2 ] = useState('');
  // const [analysisResult, setAnalysisResult] = useState('');
@@ -29,13 +29,13 @@ const RightSide = () => {
     setIsLoading(true);
 
     try {
-        const response = await axios.post('http://localhost:3000/analyze/analyzChat', {
+        const response = await axios.post('http://localhost:3000/analyze/analyzeChat', {
             foodItem1,
             foodItem2
         });
 
         setResults(response.data)
-        console.log(Results)
+        //console.log(results.newResult.food2BreakDown[0])
         // You may also want to update states related to food items if needed
     } catch (error) {
         setError(error.message);
@@ -52,19 +52,25 @@ const RightSide = () => {
         <div className="flex-1 overflow-hidden">
           <div className="flex flex-col items-center text-sm h-full md:h-screen bg-slate-900">
             <div className="text-gray-800 w-full  md:max-w-2xl lg:max-w-3xl md:h-full md:flex md:flex-col px-6">
-              <h1 className={` ${Results ? "text-xl font-semibold  mt-4 text-myCustomColor" : "text-myCustomColor text-4xl  font-semibold text-center mt-6 sm:mt-[20vh] ml-auto mr-auto mb-10 sm:mb-16"} `}>
+              <h1 className={` ${results ? "text-xl font-semibold  mt-4 text-myCustomColor" : "text-myCustomColor text-4xl  font-semibold text-center mt-6 sm:mt-[20vh] ml-auto mr-auto mb-10 sm:mb-16"} `}>
                 Nutri-Fusion Analyzer
               </h1>
 
               <div className="md:flex items-start gap-3.5 ">
-                {Results ? (
+              {results ? (
                   <div className="w-full flex-shrink-0 h-96 overflow-auto mt-4 text-white  scrollbar-thumb-slate-700 scrollbar   border-myCustomColor rounded border-2 ">
-                    
-                    <div  dangerouslySetInnerHTML={{ __html: Results }} />
-                    {/* {analysisResults.length > 0 &&
-                      analysisResults.map((analysisResult, index) => (
-                        <div key={index} dangerouslySetInnerHTML={{ __html: analysisResult }} />
-                      ))} */}
+                    <div>
+                      <h2 className="text-xl font-semibold">Food 1 Breakdown:</h2>
+                      <pre>{results.newResult.food1BreakDown[0].name}</pre>
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-semibold">Food 2 Breakdown:</h2>
+                      <pre>{results.newResult.food2BreakDown[0].name}</pre>
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-semibold">Overall Result:</h2>
+                      <p>{results.newResult.OverallResult.parts[0].text}</p>
+                    </div>
                   </div>
                 ) : (
                   [
