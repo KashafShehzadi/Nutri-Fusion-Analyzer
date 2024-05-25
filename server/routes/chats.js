@@ -7,11 +7,6 @@ dotenv.config()//to load env variables
 
 const router = express.Router();
 
-
-
-
-
-
 router.post('/analyzeChat', async (req, res) => {
     const { foodItem1, foodItem2 } = req.body;
     try {
@@ -78,13 +73,13 @@ Food Item 2: {foodItem2}
 <br>
 Food Synergy Analysis:
 
-    Synergy Score:> [how much the benefit of foods combination vs the individual food benefit] / 10
+    
         
-        Nutrient Complementarity: [Describe how the foods complement each other nutritionally, enhancing absorption or providing a broader range of nutrients.]
-          Digestive Compatibility:[Explain if the foods have similar digestion times and require similar stomach environments (acidity) for optimal digestion.]
-          Medical Insights: [Indicate if the combination aligns with Ayurvedic principles in english or is considered incompatible due to opposing energetic properties.]
-          
-          Overall Recommendation:
+        1.Nutrient Complementarity:[Nutrient Complementarity Score/10] [Describe how the foods complement each other nutritionally, enhancing absorption or providing a broader range of nutrients.]
+        2.Digestive Compatibility:[ Digestive Compatibility score/10 ][Explain if the foods have similar digestion times and require similar stomach environments (acidity) for optimal digestion.]
+        3.Medical Insights:[Medical Insights score/10] [Indicate if the combination aligns with Ayurvedic principles in english or is considered incompatible due to opposing energetic properties.]
+        4.Synergy Score:> [how much the benefit of foods combination vs the individual food benefit] / 10 
+        5.Overall Recommendation:
             
               **Ideal Combination:** Enjoy this pairing for optimal nutritional benefits and digestion.
               **Moderate Synergy:** This combination offers some benefits, but consider [suggest modifications] for improved digestion.
@@ -92,7 +87,7 @@ Food Synergy Analysis:
               **Not Recommended:** Avoid this combination to prevent potential digestive issues. Explore alternative pairings that synergize better.
             
           
-          Quantity for Normal Digestion (if applicable):[Provide specific portion recommendations or guidelines based on individual factors like age, activity level, and overall dietary intake. Emphasize consulting a healthcare professional for personalized advice.] While a general recommendation might be [suggest a starting point], it's crucial to consult a healthcare professional or registered dietitian for personalized guidance on portion sizes that suit your individual needs and dietary goals.
+        6.Quantity for Normal Digestion (if applicable):[Provide specific portion recommendations or guidelines based on individual factors like age, activity level, and overall dietary intake. Emphasize consulting a healthcare professional for personalized advice.] While a general recommendation might be [suggest a starting point], it's crucial to consult a healthcare professional or registered dietitian for personalized guidance on portion sizes that suit your individual needs and dietary goals.
         
     
     `;
