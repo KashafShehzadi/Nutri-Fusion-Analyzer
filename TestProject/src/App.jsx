@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import SignUp from './components/SignUp';
 import HomePage from './pages/HomePage'
 import Login from './components/Login';
@@ -8,6 +9,8 @@ import ChatBot from './pages/ChatBot';
 
 
 function App() {
+
+  
 
 
   return (

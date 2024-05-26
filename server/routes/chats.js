@@ -5,7 +5,6 @@ import { UserQuery } from "../models/UserQuery.js"
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { verifyUser } from '../middlewares/verifyUser.js';
 dotenv.config()//to load env variables
-
 const router = express.Router();
 
 router.post('/analyzeChat', verifyUser,async (req, res) => {
@@ -39,6 +38,23 @@ router.post('/analyzeChat', verifyUser,async (req, res) => {
 router.get('/verify', verifyUser, (req, res) => {
     return res.json({ status: true, message: "valid user" });
 });
+
+router.get('/userChatHistory', verifyUser, async (req, res) => {
+    try {
+        const userChats = await UserQuery.find({ userId: req.userId }).sort({ createdAt: -1 });
+        return res.json({ status: true, message: "User chat history fetched successfully", data: userChats });
+    } catch (error) {
+        console.error("Error fetching user chat history:", error);
+        return res.status(500).json({ status: false, message: "Internal server error" });
+    }
+});
+
+
+
+
+
+
+
 const performAnalysis = async (foodItem1, foodItem2, f1, f2) => {
     try {
         const analysisResult = await generateAnalysisResult(foodItem1, foodItem2);

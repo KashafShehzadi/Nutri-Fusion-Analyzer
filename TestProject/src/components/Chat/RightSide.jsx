@@ -55,13 +55,12 @@ const RightSide = () => {
       setResults(response.data)
       console.log(response.data)
       //const overallResultText = results ? results.newResult.OverallResult.parts[0].text : '';
-    
+      addChat({ foodItem1, foodItem2 });
     } catch (error) {
       setError(error.message);
     
     } finally {
       setIsLoading(false);
-      console.log(1+1)
     }
   };
 
@@ -103,9 +102,6 @@ const RightSide = () => {
       }
     }
   }, [results]);
-
-
-console.log(nutrientComplementarity)
 
 
   

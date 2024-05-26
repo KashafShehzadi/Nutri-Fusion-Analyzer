@@ -64,10 +64,10 @@ const ChatBot = () => {
                 </button>
             </div>
 
-            <LeftSide {...{ show }} />
+            <LeftSide {...{ show }}/>
 
             {/* Right Section */}
-            <RightSide />
+            <RightSide  />
         </div>
         </>
     );
