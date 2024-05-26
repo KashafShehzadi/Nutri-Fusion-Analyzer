@@ -3,7 +3,8 @@ import bcrypt from "bcrypt"
 import { User } from '../models/User.js';
 import jwt from 'jsonwebtoken'
 import nodemailer from 'nodemailer'
-import { GoogleGenerativeAI } from '@google/generative-ai'
+
+
 
 
 const router = express.Router();
@@ -39,7 +40,7 @@ router.post('/login', async (req, res) => {
         return res.json({ message: "Password not right" })
     }
 
-    const token = jwt.sign({ username: user.username }, process.env.KEY, { expiresIn: '5m' });
+    const token = jwt.sign({ userId: user._id, username: user.username }, process.env.KEY, { expiresIn: '5m' });
     const oneDayInMilliseconds = 1000 * 60 * 60 * 24;
 res.cookie('token', token, { httpOnly: true, maxAge: oneDayInMilliseconds });
 
@@ -141,40 +142,6 @@ router.get("/logout", (req, res) => {
     res.clearCookie('token')
     return res.json({ status: true, message: "logout sucessfull" })
 })
-
-
-//Add a new route for analyzing user queries
-// Add a new route for analyzing user queries
-// router.post('/analyze', verifyUser, async (req, res) => {
-//     const { foodItem1, foodItem2 } = req.body;
-
-//     try {
-//         // Perform analysis on user queries
-//         const { analysisResult, food1, food2 } = await performAnalysis(foodItem1, foodItem2);
-
-//         // Save user query and analysis result to your database
-//         const userQuery = new UserQuery({
-//             userId: req.user._id, // Assuming you have authentication middleware to get user information
-//             foodItem1,
-//             foodItem2,
-//             analysisResult
-//         });
-//         await userQuery.save();
-//         console.log(UserQuery)
-//         // Send analysis result and food data back to the frontend
-//         return res.json({ status: true, message: "User query analyzed successfully", analysisResult, food1, food2 });
-//     } catch (error) {
-//         console.error("Error analyzing user query:", error);
-//         return res.status(500).json({ status: false, message: "Internal server error" });
-//     }
-// });
-
-
-
-
-
-
-
 
 
 export { router as UserRouter }

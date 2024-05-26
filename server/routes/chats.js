@@ -3,11 +3,12 @@ import express from 'express';
 import dotenv from 'dotenv'
 import { UserQuery } from "../models/UserQuery.js"
 import { GoogleGenerativeAI } from '@google/generative-ai'
+import { verifyUser } from '../middlewares/verifyUser.js';
 dotenv.config()//to load env variables
 
 const router = express.Router();
 
-router.post('/analyzeChat', async (req, res) => {
+router.post('/analyzeChat', verifyUser,async (req, res) => {
     const { foodItem1, foodItem2 } = req.body;
     try {
         const f1 = await fetchNutritionData(foodItem1)
@@ -33,6 +34,10 @@ router.post('/analyzeChat', async (req, res) => {
         console.error("Error analyzing user query:", error);
         return res.status(500).json({ status: false, message: "Internal server error" });
     }
+});
+
+router.get('/verify', verifyUser, (req, res) => {
+    return res.json({ status: true, message: "valid user" });
 });
 const performAnalysis = async (foodItem1, foodItem2, f1, f2) => {
     try {

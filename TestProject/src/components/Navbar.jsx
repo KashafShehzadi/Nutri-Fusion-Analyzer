@@ -1,12 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
 import { Link } from 'react-scroll';
-import { NavLink} from 'react-router-dom';
+import { NavLink,useNavigate} from 'react-router-dom';
+import axios from 'axios'
 function Navbar() {
   const headerRef = useRef(null);
   const [click, setClick] = useState(false)
   const [nav, setNav] = useState(false);
 
+  const navigate=useNavigate()
+axios.defaults.withCredentials=true;
+const handleLogOut=()=>{
+    axios.get('http://localhost:3000/auth/logout')
+    .then(res=>{
+      if(res.data.status){  
+navigate('/login')
+      }
+    }).catch(err =>{
+      console.log(err)
+    })
+  }
   const handleNav = () => {
     setNav(!nav);
   };
@@ -56,8 +69,8 @@ function Navbar() {
         </div>
 
         <div className="flex items-center  space-x-4 lg:space-x-6">
-          <NavLink className="bg-myCustomColor text-white px-3 py-2 lg:px-5 lg:py-2 lg:font-semibold text-sm rounded-md hover:bg-[white] hover:text-myCustomColor" to="/login">Login In</NavLink>
-          <button className="bg-myCustomColor text-white px-3 py-2 text-sm lg:px-5 lg:py-2 lg:font-semibold rounded-md hover:bg-[white] hover:text-myCustomColor">Try Chatbot</button>
+          <button className="bg-myCustomColor text-white px-3 py-2 lg:px-5 lg:py-2 lg:font-semibold text-sm rounded-md hover:bg-[white] hover:text-myCustomColor" onClick={handleLogOut}>LogOut</button>
+          <NavLink className="bg-myCustomColor text-white px-3 py-2 text-sm lg:px-5 lg:py-2 lg:font-semibold rounded-md hover:bg-[white] hover:text-myCustomColor" to="/chat">Try Chatbot</NavLink>
           <div onClick={handleNav} className="text-white block md:hidden">
             {nav ? <AiOutlineClose size={20} /> : <AiOutlineMenu size={20} />}
             {nav && (

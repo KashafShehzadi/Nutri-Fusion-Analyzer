@@ -18,7 +18,7 @@ Axios.defaults.withCredentials=true;
        email, password,
     }).then(response => {
       if(response.data.status){
-      navigate('/')}
+      navigate('/dash')}
      
     }).catch(err => {
       console.log(err)
