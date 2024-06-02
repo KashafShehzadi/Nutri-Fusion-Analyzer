@@ -1,23 +1,33 @@
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { FiLogOut, FiPlus, FiSun, } from "react-icons/fi";
 import { RiUserLine } from "react-icons/ri";
 import axios from 'axios';
 
-const LeftSide = ({ show = false, foodPairs=[], selectedPair } ) => {
- 
- 
+const LeftSide = ({ show = false, foodPairs = [], selectedPair, handleNewChatClick }) => {
+
   const handleClick = async (id) => {
     try {
-        const response = await axios.get(`http://localhost:3000/analyze/getQuery/${id}`);
-        if (response.data.status) {
-          selectedPair(response.data.data);
-        } else {
-            console.error(response.data.message);
-        }
+      const response = await axios.get(`http://localhost:3000/analyze/getQuery/${id}`);
+      if (response.data.status) {
+        selectedPair(response.data.data);
+      } else {
+        console.error(response.data.message);
+      }
     } catch (error) {
-        console.error("Error fetching query data:", error);
+      console.error("Error fetching query data:", error);
     }
-};
+  };
+
+  const handleLogOut=()=>{
+    axios.get('http://localhost:3000/auth/logout')
+    .then(res=>{
+      if(res.data.status){  
+navigate('/login')
+      }
+    }).catch(err =>{
+      console.log(err)
+    })
+  }
 
   return (
     <div
@@ -27,7 +37,7 @@ const LeftSide = ({ show = false, foodPairs=[], selectedPair } ) => {
       <div className="flex h-full min-h-0 flex-col ">
         <div className="scrollbar-trigger flex h-full w-full flex-1 items-start border-white/20">
           <nav className="flex h-full flex-1 flex-col space-y-1 p-2">
-            <a className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm mb-2 flex-shrink-0 border border-myCustomColor">
+            <a className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm mb-2 flex-shrink-0 border border-myCustomColor" onClick={handleNewChatClick}>
               <FiPlus />
               New chat
             </a>
@@ -61,7 +71,7 @@ const LeftSide = ({ show = false, foodPairs=[], selectedPair } ) => {
 
               {
                 icon: <FiLogOut className="h-4 w-4 text-myCustomColor font-bold"
-                  strokeWidth="2" />, text: "Log out"
+                  strokeWidth="2"/>, text: "Log out",
               },
             ].map((item, index) => (
               <a

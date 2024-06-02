@@ -13,6 +13,7 @@ const ChatBot = () => {
     const [show, setShow] = useState(false);
     const [foodPairs, setFoodPairs] = useState([]);
     const [selectedPair, setSelectedPair] = useState(null);
+    const [results, setResults] = useState(null); 
 
     axios.defaults.withCredentials = true;
 //verify user before chat
@@ -64,6 +65,10 @@ const ChatBot = () => {
         return null;
     }
 
+    const handleNewChatClick = () => {
+        setResults(null);
+        setSelectedPair(null);  // Optionally clear selected pair
+    };
     return (
         <>
             <div>
@@ -84,9 +89,9 @@ const ChatBot = () => {
                     </button>
                 </div>
 
-                <LeftSide show={show} foodPairs={foodPairs} selectedPair={setSelectedPair} />
+                <LeftSide show={show} foodPairs={foodPairs} selectedPair={setSelectedPair} handleNewChatClick={handleNewChatClick} />
 
-                <RightSide selectedPair={selectedPair} />
+                <RightSide selectedPair={selectedPair} results={results} setResults={setResults} />
             </div>
         </>
     );

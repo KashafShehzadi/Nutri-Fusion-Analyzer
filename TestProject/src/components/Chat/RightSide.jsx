@@ -3,17 +3,16 @@ import { HiOutlineExclamation, HiOutlineLightningBolt, HiOutlineSun } from "reac
 import { RiSendPlane2Line } from "react-icons/ri";
 import axios from 'axios';
 
-const RightSide = ({ selectedPair }) => {
+const RightSide = ({ selectedPair, results, setResults }) => {
   const [foodItem1, setFoodItem1] = useState('');
   const [foodItem2, setFoodItem2] = useState('');
-  const [results, setResults] = useState(null);
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     if (selectedPair) {
-      setFoodItem1(selectedPair.foodItem1 || '');
-      setFoodItem2(selectedPair.foodItem2 || '');
+
       if (selectedPair.analysisResult) {
         setResults({
           food1BreakDown: selectedPair.analysisResult.food1BreakDown[0],
@@ -37,12 +36,15 @@ const RightSide = ({ selectedPair }) => {
 
     try {
       await handleAnalyzeClick();
+      setFoodItem1('');
+      setFoodItem2('');
     } catch (error) {
       setError(error.message);
     }
   };
 
   const handleAnalyzeClick = async () => {
+    setResults(null);
     setError(null);
     setIsLoading(true);
     try {
@@ -55,7 +57,8 @@ const RightSide = ({ selectedPair }) => {
           food2BreakDown: data.newResult.food2BreakDown[0],
           overallResult: data.newResult.OverallResult.parts[0].text
         });
-      } else {
+      }
+      else {
         setError("Unexpected response structure");
       }
     } catch (error) {
@@ -64,6 +67,8 @@ const RightSide = ({ selectedPair }) => {
       setIsLoading(false);
     }
   };
+
+
 
   return (
     <div className="flex h-screen flex-1 flex-col md:pl-[260px]">
