@@ -49,6 +49,20 @@ router.get('/userChatHistory', verifyUser, async (req, res) => {
     }
 });
 
+router.get('/getQuery/:id', verifyUser, async (req, res) => {
+    try {
+        const queryId = req.params.id;
+        const userQuery = await UserQuery.findById(queryId);
+        if (!userQuery) {
+            return res.status(404).json({ status: false, message: "Query not found" });
+        }
+        return res.json({ status: true, message: "Query fetched successfully", data: userQuery });
+    } catch (error) {
+        console.error("Error fetching query:", error);
+        return res.status(500).json({ status: false, message: "Internal server error" });
+    }
+});
+
 
 
 

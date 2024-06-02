@@ -3,22 +3,21 @@ import { FiLogOut, FiPlus, FiSun, } from "react-icons/fi";
 import { RiUserLine } from "react-icons/ri";
 import axios from 'axios';
 
-const LeftSide = ({ show = false }) => {
-  const [chats, setChats] = useState([]);
-  useEffect(() => {
-    // Fetch the chat history
-    const fetchChatHistory = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/analyze/userChatHistory', { withCredentials: true });
+const LeftSide = ({ show = false, foodPairs=[], selectedPair } ) => {
+ 
+ 
+  const handleClick = async (id) => {
+    try {
+        const response = await axios.get(`http://localhost:3000/analyze/getQuery/${id}`);
         if (response.data.status) {
-          setChats(response.data.data);
+          selectedPair(response.data.data);
+        } else {
+            console.error(response.data.message);
         }
-      } catch (error) {
-        console.error("Error fetching chat history:", error);
-      }
-    };
-    fetchChatHistory();
-  }, []);
+    } catch (error) {
+        console.error("Error fetching query data:", error);
+    }
+};
 
   return (
     <div
@@ -35,8 +34,8 @@ const LeftSide = ({ show = false }) => {
             <div className="flex-col flex-1 overflow-y-auto border-b border-white/20">
               <div className="flex flex-col gap-2 text-gray-100 text-sm">
                 {/*previous chats shown here  */}
-                {chats.map(chat => (
-                  <div key={chat._id} className="p-2 hover:bg-gray-700 rounded-md cursor-pointer">
+                {foodPairs.map(chat => (
+                  <div key={chat._id} onClick={() => handleClick(chat._id)} className="p-2 hover:bg-gray-700 rounded-md cursor-pointer">
                     <p><strong>Food 1:</strong> {chat.foodItem1}</p>
                     <p><strong>Food 2:</strong> {chat.foodItem2}</p>
                   </div>
