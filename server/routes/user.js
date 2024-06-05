@@ -40,7 +40,7 @@ router.post('/login', async (req, res) => {
         return res.json({ message: "Password not right" })
     }
 
-    const token = jwt.sign({ userId: user._id, username: user.username }, process.env.KEY, { expiresIn: '5m' });
+    const token = jwt.sign({ userId: user._id, username: user.username }, process.env.KEY, { expiresIn: '60m' });
     const oneDayInMilliseconds = 1000 * 60 * 60 * 24;
 res.cookie('token', token, { httpOnly: true, maxAge: oneDayInMilliseconds });
 
@@ -51,7 +51,7 @@ res.cookie('token', token, { httpOnly: true, maxAge: oneDayInMilliseconds });
 })
 //forget password code
 router.post('/forgot', async (req, res) => {
-    const { email, password } = req.body;
+    const { email } = req.body;
     try {
         const user = await User.findOne({ email })
         if (!user) {
@@ -64,7 +64,7 @@ router.post('/forgot', async (req, res) => {
             service: 'gmail',
             auth: {
                 user: 'bsef20m519@pucit.edu.pk',
-                pass: 'bqzqeshsikhlbioy'
+                pass: 'whrfevrxfkawpuvk'
             }
         });
 
@@ -77,9 +77,10 @@ router.post('/forgot', async (req, res) => {
 
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
+                console.log(error)
                 return res.json({ message: 'email not sent ,err' });
             } else {
-                { }
+                
                 return res.json({ status: true, message: 'email sent' });
             }
         });
@@ -89,10 +90,6 @@ router.post('/forgot', async (req, res) => {
         console.log(err)
 
     }
-
-
-
-
 })
 
 //reset -code
@@ -109,8 +106,6 @@ router.post('/resetPassword/:token', async (req, res) => {
     } catch (err) {
         return res.json({ status: true, message: "invalid token" })
     }
-
-
 })
 
 //protected routes

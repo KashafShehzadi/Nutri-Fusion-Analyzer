@@ -6,13 +6,11 @@ import axios from 'axios';
 const RightSide = ({ selectedPair, results, setResults }) => {
   const [foodItem1, setFoodItem1] = useState('');
   const [foodItem2, setFoodItem2] = useState('');
-
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     if (selectedPair) {
-
       if (selectedPair.analysisResult) {
         setResults({
           food1BreakDown: selectedPair.analysisResult.food1BreakDown[0],
@@ -42,31 +40,43 @@ const RightSide = ({ selectedPair, results, setResults }) => {
       setError(error.message);
     }
   };
-
-  const handleAnalyzeClick = async () => {
-    setResults(null);
-    setError(null);
-    setIsLoading(true);
-    try {
-      const response = await axios.post('http://localhost:3000/analyze/analyzeChat', { foodItem1, foodItem2 });
-      const data = response.data;
-      //console.log(data); // Debugging: log the response data
-      if (data.newResult) {
-        setResults({
-          food1BreakDown: data.newResult.food1BreakDown[0],
-          food2BreakDown: data.newResult.food2BreakDown[0],
-          overallResult: data.newResult.OverallResult.parts[0].text
-        });
-      }
-      else {
-        setError("Unexpected response structure");
-      }
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setIsLoading(false);
+  // Handler for analyzing food items
+const handleAnalyzeClick = async () => {
+  // Reset results and error states
+  setResults(null);
+  setError(null);
+  setIsLoading(true);
+  try {
+    // Make API call to analyze chat
+    const response = await axios.post('http://localhost:3000/analyze/analyzeChat', { foodItem1, foodItem2 });
+    const data = response.data;
+    // Check if new results are available
+    if (data.newResult) {
+      // Update results state
+      setResults({
+        food1BreakDown: data.newResult.food1BreakDown[0],
+        food2BreakDown: data.newResult.food2BreakDown[0],
+        overallResult: data.newResult.OverallResult.parts[0].text
+      });
+    } else {
+      // Set error state if no new results are available
+      setError(data.message);
     }
-  };
+  } catch (error) {
+    // Check if the error response has a message
+    if (error.response && error.response.status === 400) {
+      // Set error state with the message from the server
+      setError("Invalid food item(s)");
+    } else {
+      // Set error state if an error occurs during API call
+      setError(error.message);
+    }
+  } finally {
+    // Set loading state to false
+    setIsLoading(false);
+  }
+};
+
 
 
 
@@ -177,6 +187,11 @@ const RightSide = ({ selectedPair, results, setResults }) => {
               </div>
             </div>
           </form>
+          {error && (
+            <div className="flex items-center justify-center h-full">
+              <p className="text-red-500">{error}</p>
+            </div>
+          )}
           <div className="px-3 pt-2 pb-3 text-center text-xs text-gray-100/50 md:px-4 md:pt-3 md:pb-6">
             Nutri-Fusion
             &nbsp;Created by KF teams

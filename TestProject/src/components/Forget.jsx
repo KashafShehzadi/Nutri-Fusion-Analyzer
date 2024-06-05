@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 
 function Forget() {
   const [email, setEmail] = useState("");
   const [errors, setErrors] = useState({});
-  
+  const [errorMessage, setErrorMessage] = useState(""); // State to store error message
   const navigate = useNavigate();
-  
+
   // Validate input fields
   const validate = () => {
     const errors = {};
@@ -36,8 +35,13 @@ function Forget() {
       if (response.data.status) {
         alert("Check your Email for further instructions");
         navigate('/login');
+      } else {
+        // Display error message to the user
+        setErrorMessage(response.data.message);
       }
     }).catch(err => {
+      // Display error message to the user
+      setErrorMessage("An error occurred while processing your request. Please try again later.");
       console.log(err);
     });
   };
@@ -70,6 +74,8 @@ function Forget() {
                   Send Reset Link
                 </button>
               </div>
+              {/* Render error message if present */}
+              {errorMessage && <p className="text-red-500 text-sm mt-2">{errorMessage}</p>}
             </div>
           </form>
         </div>

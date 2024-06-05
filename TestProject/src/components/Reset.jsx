@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 function Reset() {
     const [password, setPassword] = useState("");
     const [errors, setErrors] = useState({});
+    const [errorMessage, setErrorMessage] = useState(""); // State to store error message
     const { token } = useParams();
     const navigate = useNavigate();
 
@@ -35,8 +36,8 @@ function Reset() {
             if (response.data.status) {
                 navigate('/login');
             }
-            console.log(response.data);
         }).catch(err => {
+            setErrorMessage("An error occurred while resetting your password. Please try again later.");
             console.log(err);
         });
     };
@@ -69,6 +70,8 @@ function Reset() {
                                     Reset Password
                                 </button>
                             </div>
+                            {/* Render error message if present */}
+                            {errorMessage && <p className="text-red-500 text-sm mt-2">{errorMessage}</p>}
                         </div>
                     </form>
                 </div>

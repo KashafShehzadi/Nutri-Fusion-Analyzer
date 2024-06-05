@@ -49,7 +49,7 @@ function Home() {
                     <p className="text-lg md:text-xl lg:text-xl  mb-8">Unlock food synergy & avoid risks,Nutri-Fusion analyzes your meals, optimizes your nutrition.</p>
 
                 </div>
-                <button onClick={toggleVideo} className=" border-zinc-30 border-2 text-white px-4 py-2 rounded-md absolute bottom-1 right-0 z-50">Pause/Play Video</button>
+                <button onClick={toggleVideo} className=" border-zinc-30 border-2 text-white px-4 py-2 rounded-md absolute bottom-1 right-0 z-50">{isVideoPlaying?"Pause Video":"Play Video"}</button>
             </div>
         </div>
     )

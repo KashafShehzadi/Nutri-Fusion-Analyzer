@@ -96,7 +96,7 @@ function Login() {
                   Login
                 </button>
               </div>
-              <Link className='text-blue-400 underline' to='/forgot'>Forget Password?</Link>
+              <Link className='text-blue-400 underline' to='/forgot'>Forgot Password?</Link>
               <div className="w-full text-white lg:flex justify-center mt-4">
                 <p>Don't have an account?</p><Link to="/signup" className="text-blue-400 underline">Register Here</Link>
               </div>

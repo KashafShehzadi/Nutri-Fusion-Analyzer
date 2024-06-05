@@ -7,11 +7,17 @@ import { verifyUser } from '../middlewares/verifyUser.js';
 dotenv.config()//to load env variables
 const router = express.Router();
 
-router.post('/analyzeChat', verifyUser,async (req, res) => {
+router.post('/analyzeChat', verifyUser, async (req, res) => {
     const { foodItem1, foodItem2 } = req.body;
     try {
-        const f1 = await fetchNutritionData(foodItem1)
-        const f2 = await fetchNutritionData(foodItem2)
+        const f1 = await fetchNutritionData(foodItem1);
+        const f2 = await fetchNutritionData(foodItem2);
+        
+        // Check if f1 or f2 is empty or does not contain any data
+        if (!f1 || !f2 || Object.keys(f1).length === 0 || Object.keys(f2).length === 0) {
+            return res.status(400).json({ status: false, message: "Invalid food item(s)" });
+        }
+        
         const { analysisResult } = await performAnalysis(foodItem1, foodItem2, f1, f2);
         const newResult = {
             food1BreakDown: f1,
@@ -62,11 +68,6 @@ router.get('/getQuery/:id', verifyUser, async (req, res) => {
         return res.status(500).json({ status: false, message: "Internal server error" });
     }
 });
-
-
-
-
-
 
 
 const performAnalysis = async (foodItem1, foodItem2, f1, f2) => {
