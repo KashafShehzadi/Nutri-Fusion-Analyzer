@@ -88,10 +88,9 @@ const ChatBot = () => {
                         <AiOutlinePlus className="h-6 w-6" />
                     </button>
                 </div>
+                <LeftSide show={show} foodPairs={foodPairs} setPairs={setFoodPairs} selectedPair={setSelectedPair} handleNewChatClick={handleNewChatClick} />
 
-                <LeftSide show={show} foodPairs={foodPairs} selectedPair={setSelectedPair} handleNewChatClick={handleNewChatClick} />
-
-                <RightSide selectedPair={selectedPair} results={results} setResults={setResults} />
+                <RightSide selectedPair={selectedPair} results={results} setPairs={setFoodPairs} setResults={setResults} />
             </div>
         </>
     );

@@ -6,6 +6,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 import { verifyUser } from '../middlewares/verifyUser.js';
 dotenv.config()//to load env variables
 const router = express.Router();
+const genAI = new GoogleGenerativeAI(process.env.VITE_GEM);
 
 router.post('/analyzeChat', verifyUser, async (req, res) => {
     const { foodItem1, foodItem2 } = req.body;
@@ -69,6 +70,19 @@ router.get('/getQuery/:id', verifyUser, async (req, res) => {
     }
 });
 
+router.delete('/deleteQuery/:id', verifyUser, async (req, res) => {
+    try {
+        const queryId = req.params.id;
+        const deletedQuery = await UserQuery.findByIdAndDelete(queryId);
+        if (!deletedQuery) {
+            return res.status(404).json({ status: false, message: "Query not found" });
+        }
+        return res.json({ status: true, message: "Query deleted successfully" });
+    } catch (error) {
+        console.error("Error deleting query:", error);
+        return res.status(500).json({ status: false, message: "Internal server error" });
+    }
+});
 
 const performAnalysis = async (foodItem1, foodItem2, f1, f2) => {
     try {
@@ -128,7 +142,7 @@ Food Synergy Analysis:
     
     `;
 
-const genAI = new GoogleGenerativeAI(process.env.VITE_GEM);
+
 
 const generateAnalysisResult = async (foodItem1, foodItem2) => {
     const formattedPrompt = promptTemplate.replace('{foodItem1}', foodItem1)

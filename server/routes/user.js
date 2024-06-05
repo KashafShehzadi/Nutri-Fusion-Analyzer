@@ -110,24 +110,22 @@ router.post('/resetPassword/:token', async (req, res) => {
 
 //protected routes
 //function  for check auth
+// Function for checking auth
 const verifyUser = async (req, res, next) => {
     try {
-        const token = req.cookies.token;
-        if (!token) {
-
-            return res.json({ status: false, message: "no token" });
-        }
-        const decoded = await jwt.verify(token, process.env.KEY);
-        next()
-
+      const token = req.cookies.token;
+      if (!token) {
+        return res.json({ status: false, message: "no token" });
+      }
+      const decoded = await jwt.verify(token, process.env.KEY);
+      req.userId = decoded.userId; // Set userId in the request object
+      next();
+    } catch (err) {
+      console.log(err);
+      return res.json(err);
     }
-    catch (err) {
-        console.log(err)
-        return res.json(err)
-    }
-
-}
-
+  };
+  
 router.get('/verify', verifyUser, (req, res) => {
     return res.json({ status: true, message: "valid user" });
 });
@@ -138,5 +136,39 @@ router.get("/logout", (req, res) => {
     return res.json({ status: true, message: "logout sucessfull" })
 })
 
-
+router.get('/userInfo', verifyUser, async (req, res) => {
+    try {
+      const userId = req.userId; // Assuming you set userId in the verification middleware
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      res.json({ userInfo: { username: user.username, email: user.email } });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  });
+  // Add the update profile route to your existing router
+  router.put('/updateProfile', verifyUser, async (req, res) => {
+    try {
+      const userId = req.userId; // Assuming you set userId in the verification middleware
+      const { username, password } = req.body;
+  
+      // Hash the password if it is being updated
+      const updateFields = { username };
+      if (password) {
+        updateFields.password = await bcrypt.hash(password, 10);
+      }
+  
+      // Update the user's information
+      await User.findByIdAndUpdate(userId, updateFields);
+  
+      res.json({ status: true, message: 'Profile updated successfully' });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  });
+  
 export { router as UserRouter }
